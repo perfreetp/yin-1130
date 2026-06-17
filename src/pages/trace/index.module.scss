@@ -101,11 +101,16 @@
   box-shadow: $shadow-card;
   margin-bottom: $spacing-md;
   transition: all $transition-base;
+  cursor: pointer;
 
   &:active {
     opacity: 0.9;
     transform: scale(0.98);
   }
+}
+
+.packCardUsed {
+  opacity: 0.7;
 }
 
 .packHeader {
@@ -199,4 +204,104 @@
 .emptyText {
   font-size: $font-size-sm;
   color: $color-text-tertiary;
+}
+
+.dialogMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0 48rpx;
+}
+
+.dialog {
+  width: 100%;
+  background: $color-white;
+  border-radius: $radius-lg;
+  padding: 48rpx 40rpx;
+}
+
+.dialogTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.dialogDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  text-align: center;
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+.formItem {
+  margin-bottom: 24rpx;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.formInput {
+  width: 100%;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.formTextarea {
+  width: 100%;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  min-height: 160rpx;
+  box-sizing: border-box;
+}
+
+.dialogButtons {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 32rpx;
+}
+
+.dialogBtn {
+  flex: 1;
+  padding: 24rpx;
+  border-radius: $radius-md;
+  text-align: center;
+  background: $color-bg-page;
+}
+
+.dialogBtnPrimary {
+  background: $color-primary;
+}
+
+.dialogBtnText {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+}
+
+.dialogBtnTextPrimary {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-white;
 }

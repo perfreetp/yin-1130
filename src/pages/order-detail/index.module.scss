@@ -34,11 +34,27 @@
   margin-bottom: $spacing-md;
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
 .sectionTitle {
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
   margin-bottom: $spacing-md;
+}
+
+.sectionHeader .sectionTitle {
+  margin-bottom: 0;
+}
+
+.photoCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
 }
 
 .row {
@@ -117,9 +133,13 @@
 
 .timelineTitle {
   font-size: $font-size-sm;
-  color: $color-text-primary;
+  color: $color-text-secondary;
   font-weight: $font-weight-medium;
   margin-bottom: 4rpx;
+}
+
+.timelineTitleActive {
+  color: $color-text-primary;
 }
 
 .timelineTime {
@@ -139,6 +159,12 @@
   border-radius: $radius-sm;
   background: $color-bg-page;
   overflow: hidden;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
 }
 
 .remarkBox {
@@ -151,4 +177,92 @@
   font-size: $font-size-sm;
   color: $color-text-secondary;
   line-height: $line-height-loose;
+}
+
+.receiveSection {
+  background: rgba(14, 165, 160, 0.05);
+  border: 2rpx solid rgba(14, 165, 160, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.receiveTip {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+}
+
+.receiveRemark {
+  width: 100%;
+  height: 120rpx;
+  background: $color-bg-card;
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  border: 1rpx solid $color-border;
+}
+
+.actionBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: $spacing-md;
+  z-index: 100;
+}
+
+.btnSecondary {
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  border: 2rpx solid $color-status-error;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-card;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    background: $color-tag-error-bg;
+  }
+}
+
+.btnSecondaryText {
+  font-size: $font-size-md;
+  color: $color-status-error;
+  font-weight: $font-weight-medium;
+}
+
+.btnPrimary {
+  flex: 2;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.btnPrimaryText {
+  font-size: $font-size-md;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.placeholder {
+  padding-bottom: 160rpx;
 }

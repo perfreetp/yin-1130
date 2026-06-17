@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Input } from '@tarojs/components';
+import { View, Text, Input, Textarea } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import BatchCard from '@/components/BatchCard';
@@ -7,14 +7,19 @@ import DeliveryCard from '@/components/DeliveryCard';
 import { useAppStore } from '@/store/useAppStore';
 import { SterilePack } from '@/types/instrument';
 import { getExpiryDays } from '@/utils/format';
+import dayjs from 'dayjs';
 import styles from './index.module.scss';
 
 type TraceTab = 'packs' | 'batches' | 'deliveries';
 
 const TracePage: React.FC = () => {
-  const { sterilePacks, batches, deliveries } = useAppStore();
+  const { sterilePacks, batches, deliveries, user, updateSterilePack } = useAppStore();
   const [activeTab, setActiveTab] = useState<TraceTab>('packs');
   const [searchValue, setSearchValue] = useState('');
+  const [showUseDialog, setShowUseDialog] = useState(false);
+  const [selectedPack, setSelectedPack] = useState<SterilePack | null>(null);
+  const [patientName, setPatientName] = useState('');
+  const [useRemark, setUseRemark] = useState('');
 
   const filteredPacks = useMemo(() => {
     if (!searchValue) return sterilePacks;
@@ -42,6 +47,54 @@ const TracePage: React.FC = () => {
     if (searchValue) {
       Taro.navigateTo({ url: `/pages/trace-query/index?code=${searchValue}` });
     }
+  };
+
+  const handlePackClick = (pack: SterilePack) => {
+    if (pack.status === 'used') {
+      Taro.showToast({ title: '该无菌包已使用', icon: 'none' });
+      return;
+    }
+    if (pack.status === 'expired') {
+      Taro.showToast({ title: '该无菌包已过期', icon: 'none' });
+      return;
+    }
+    setSelectedPack(pack);
+    setPatientName('');
+    setUseRemark('');
+    setShowUseDialog(true);
+  };
+
+  const handleConfirmUse = () => {
+    if (!patientName.trim()) {
+      Taro.showToast({ title: '请输入患者姓名', icon: 'none' });
+      return;
+    }
+    if (!selectedPack) return;
+
+    Taro.showModal({
+      title: '确认使用',
+      content: `确认无菌包 ${selectedPack.packNo} 已用于患者 ${patientName}？`,
+      success: (res) => {
+        if (res.confirm) {
+          const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
+          updateSterilePack(selectedPack.id, {
+            status: 'used',
+            usedBy: user.name,
+            usedAt: now,
+            patientName: patientName.trim()
+          });
+          console.info(
+            '[Trace] Sterile pack used:',
+            selectedPack.packNo,
+            'for patient:',
+            patientName
+          );
+          Taro.showToast({ title: '已记录使用信息', icon: 'success' });
+          setShowUseDialog(false);
+          setSelectedPack(null);
+        }
+      }
+    });
   };
 
   const getExpiryClass = (pack: SterilePack) => {
@@ -118,7 +171,14 @@ const TracePage: React.FC = () => {
           <>
             {filteredPacks.length > 0 ? (
               filteredPacks.map((pack) => (
-                <View className={styles.packCard} key={pack.id}>
+                <View
+                  className={classnames(
+                    styles.packCard,
+                    pack.status === 'used' && styles.packCardUsed
+                  )}
+                  key={pack.id}
+                  onClick={() => handlePackClick(pack)}
+                >
                   <View className={styles.packHeader}>
                     <Text className={styles.packNo}>{pack.packNo}</Text>
                   </View>
@@ -185,6 +245,52 @@ const TracePage: React.FC = () => {
           </>
         )}
       </View>
+
+      {showUseDialog && selectedPack && (
+        <View
+          className={styles.dialogMask}
+          onClick={() => setShowUseDialog(false)}
+        >
+          <View className={styles.dialog} onClick={(e) => e.stopPropagation()}>
+            <Text className={styles.dialogTitle}>回填使用信息</Text>
+            <Text className={styles.dialogDesc}>
+              无菌包 {selectedPack.packNo}
+            </Text>
+            <View className={styles.formItem}>
+              <Text className={styles.formLabel}>患者姓名</Text>
+              <Input
+                className={styles.formInput}
+                placeholder="请输入患者姓名"
+                value={patientName}
+                onInput={(e) => setPatientName(e.detail.value)}
+              />
+            </View>
+            <View className={styles.formItem}>
+              <Text className={styles.formLabel}>备注（可选）</Text>
+              <Textarea
+                className={styles.formTextarea}
+                placeholder="请输入使用备注"
+                value={useRemark}
+                onInput={(e) => setUseRemark(e.detail.value)}
+              />
+            </View>
+            <View className={styles.dialogButtons}>
+              <View
+                className={styles.dialogBtn}
+                onClick={() => setShowUseDialog(false)}
+              >
+                <Text className={styles.dialogBtnText}>取消</Text>
+              </View>
+              <View
+                className={classnames(styles.dialogBtn, styles.dialogBtnPrimary)}
+                onClick={handleConfirmUse}
+              >
+                <Text className={styles.dialogBtnTextPrimary}>确认使用</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

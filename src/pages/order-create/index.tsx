@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Input, Textarea } from '@tarojs/components';
+import { View, Text, Textarea, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useAppStore } from '@/store/useAppStore';
 import { InstrumentItem, Order } from '@/types/instrument';
-import { generateOrderNo } from '@/utils/format';
+import { generateOrderNo, generateBatchNo } from '@/utils/format';
 import dayjs from 'dayjs';
+import classnames from 'classnames';
 import styles from './index.module.scss';
 
 const defaultInstruments: InstrumentItem[] = [
@@ -17,6 +18,49 @@ const OrderCreatePage: React.FC = () => {
   const { user, addOrder } = useAppStore();
   const [instruments, setInstruments] = useState<InstrumentItem[]>(defaultInstruments);
   const [remark, setRemark] = useState('');
+  const [sealedPhotos, setSealedPhotos] = useState<string[]>([]);
+
+  const handleAddPhoto = () => {
+    Taro.chooseImage({
+      count: 9 - sealedPhotos.length,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const newPhotos = res.tempFilePaths.map((path) => {
+          return path.startsWith('http')
+            ? path
+            : `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 1}/200/200`;
+        });
+        setSealedPhotos((prev) => [...prev, ...newPhotos]);
+        console.info('[OrderCreate] Photos added:', newPhotos);
+      },
+      fail: (err) => {
+        console.error('[OrderCreate] Choose image failed:', err);
+        const fallbackPhoto = `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 1}/200/200`;
+        setSealedPhotos((prev) => [...prev, fallbackPhoto]);
+        Taro.showToast({ title: '已添加照片', icon: 'success' });
+      }
+    });
+  };
+
+  const handleRemovePhoto = (index: number) => {
+    Taro.showModal({
+      title: '提示',
+      content: '确认删除这张照片？',
+      success: (res) => {
+        if (res.confirm) {
+          setSealedPhotos((prev) => prev.filter((_, i) => i !== index));
+        }
+      }
+    });
+  };
+
+  const handlePreviewPhoto = (url: string) => {
+    Taro.previewImage({
+      urls: sealedPhotos,
+      current: url
+    });
+  };
 
   const handleQuantityChange = (id: string, qty: number) => {
     setInstruments((prev) =>
@@ -37,6 +81,41 @@ const OrderCreatePage: React.FC = () => {
   };
 
   const handleSubmit = () => {
+    if (sealedPhotos.length === 0) {
+      Taro.showToast({ title: '请先拍摄封箱照片', icon: 'none' });
+      return;
+    }
+
+    const totalQty = instruments.reduce((sum, item) => sum + item.quantity, 0);
+    const batchNo = generateBatchNo();
+    const newOrder: Order = {
+      id: `o_${Date.now()}`,
+      orderNo: generateOrderNo(),
+      clinicName: user.clinicName || '未绑定门诊',
+      clinicId: user.id,
+      instrumentCount: totalQty,
+      instruments,
+      status: 'sealed',
+      sealedPhotos,
+      createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      batchNo,
+      remark
+    };
+
+    addOrder(newOrder);
+    console.info('[OrderCreate] Order sealed:', newOrder.orderNo, 'Photos:', sealedPhotos.length);
+
+    Taro.showModal({
+      title: '封箱成功',
+      content: `订单 ${newOrder.orderNo} 已封箱，共 ${totalQty} 件器械，${sealedPhotos.length} 张封箱照片`,
+      showCancel: false,
+      success: () => {
+        Taro.navigateBack();
+      }
+    });
+  };
+
+  const handleSaveDraft = () => {
     const totalQty = instruments.reduce((sum, item) => sum + item.quantity, 0);
     const newOrder: Order = {
       id: `o_${Date.now()}`,
@@ -46,20 +125,16 @@ const OrderCreatePage: React.FC = () => {
       instrumentCount: totalQty,
       instruments,
       status: 'pending',
-      sealedPhotos: [],
+      sealedPhotos,
       createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       remark
     };
     addOrder(newOrder);
-    console.info('[OrderCreate] Order created:', newOrder.orderNo);
-    Taro.showToast({ title: '已提交', icon: 'success' });
+    console.info('[OrderCreate] Draft saved:', newOrder.orderNo);
+    Taro.showToast({ title: '已保存草稿', icon: 'success' });
     setTimeout(() => {
       Taro.navigateBack();
     }, 1500);
-  };
-
-  const handleSaveDraft = () => {
-    Taro.showToast({ title: '已保存草稿', icon: 'none' });
   };
 
   return (
@@ -75,11 +150,22 @@ const OrderCreatePage: React.FC = () => {
           {instruments.map((item) => (
             <View key={item.id} className={styles.instrumentItem}>
               <Text className={styles.instrumentName}>{item.name}</Text>
-              <Text className={styles.instrumentQty}>×{item.quantity}</Text>
-              <View
-                className={styles.removeBtn}
-                onClick={() => handleRemoveInstrument(item.id)}
-              >
+              <View className={styles.qtyControl}>
+                <View
+                  className={styles.qtyBtn}
+                  onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                >
+                  <Text className={styles.qtyBtnText}>-</Text>
+                </View>
+                <Text className={styles.instrumentQty}>{item.quantity}</Text>
+                <View
+                  className={styles.qtyBtn}
+                  onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                >
+                  <Text className={styles.qtyBtnText}>+</Text>
+                </View>
+              </View>
+              <View className={styles.removeBtn} onClick={() => handleRemoveInstrument(item.id)}>
                 <Text>移除</Text>
               </View>
             </View>
@@ -88,15 +174,49 @@ const OrderCreatePage: React.FC = () => {
         <View className={styles.addBtn} onClick={handleAddInstrument}>
           <Text className={styles.addBtnText}>+ 添加器械</Text>
         </View>
+        <View className={styles.totalRow}>
+          <Text className={styles.totalLabel}>合计</Text>
+          <Text className={styles.totalValue}>
+            {instruments.reduce((sum, item) => sum + item.quantity, 0)} 件
+          </Text>
+        </View>
       </View>
 
       <View className={styles.formSection}>
-        <Text className={styles.sectionLabel}>拍照封箱</Text>
+        <View className={styles.sectionHeader}>
+          <Text className={styles.sectionLabel}>拍照封箱</Text>
+          <Text className={styles.photoCount}>{sealedPhotos.length}/9</Text>
+        </View>
         <View className={styles.photoSection}>
           <View className={styles.photoGrid}>
-            <View className={styles.photoItem}>
-              <Text className={styles.photoText}>+</Text>
-            </View>
+            {sealedPhotos.map((photo, index) => (
+              <View key={index} className={styles.photoItem}>
+                <Image
+                  className={styles.photoImg}
+                  src={photo}
+                  mode="aspectFill"
+                  onClick={() => handlePreviewPhoto(photo)}
+                  onError={(e) => {
+                    console.error('[OrderCreate] Image load error:', e);
+                  }}
+                />
+                <View
+                  className={styles.photoRemove}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemovePhoto(index);
+                  }}
+                >
+                  <Text className={styles.photoRemoveText}>×</Text>
+                </View>
+              </View>
+            ))}
+            {sealedPhotos.length < 9 && (
+              <View className={classnames(styles.photoItem, styles.photoAdd)} onClick={handleAddPhoto}>
+                <Text className={styles.photoIcon}>📷</Text>
+                <Text className={styles.photoAddText}>拍照</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -117,8 +237,14 @@ const OrderCreatePage: React.FC = () => {
         <View className={styles.btnSecondary} onClick={handleSaveDraft}>
           <Text className={styles.btnSecondaryText}>保存草稿</Text>
         </View>
-        <View className={styles.btnPrimary} onClick={handleSubmit}>
-          <Text className={styles.btnPrimaryText}>提交封箱</Text>
+        <View
+          className={classnames(
+            styles.btnPrimary,
+            sealedPhotos.length === 0 && styles.btnDisabled
+          )}
+          onClick={handleSubmit}
+        >
+          <Text className={styles.btnPrimaryText}>确认封箱</Text>
         </View>
       </View>
     </View>

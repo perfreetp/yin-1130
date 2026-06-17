@@ -12,9 +12,12 @@ interface AppState {
   setRole: (role: 'clinic' | 'center') => void;
   addOrder: (order: Order) => void;
   updateOrder: (id: string, updates: Partial<Order>) => void;
+  addBatch: (batch: Batch) => void;
   updateBatch: (id: string, updates: Partial<Batch>) => void;
+  addDelivery: (delivery: Delivery) => void;
   updateDelivery: (id: string, updates: Partial<Delivery>) => void;
   updateSterilePack: (id: string, updates: Partial<SterilePack>) => void;
+  addSterilePack: (pack: SterilePack) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -30,10 +33,12 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => ({
       orders: state.orders.map((o) => (o.id === id ? { ...o, ...updates } : o))
     })),
+  addBatch: (batch) => set((state) => ({ batches: [batch, ...state.batches] })),
   updateBatch: (id, updates) =>
     set((state) => ({
       batches: state.batches.map((b) => (b.id === id ? { ...b, ...updates } : b))
     })),
+  addDelivery: (delivery) => set((state) => ({ deliveries: [delivery, ...state.deliveries] })),
   updateDelivery: (id, updates) =>
     set((state) => ({
       deliveries: state.deliveries.map((d) => (d.id === id ? { ...d, ...updates } : d))
@@ -41,5 +46,6 @@ export const useAppStore = create<AppState>((set) => ({
   updateSterilePack: (id, updates) =>
     set((state) => ({
       sterilePacks: state.sterilePacks.map((p) => (p.id === id ? { ...p, ...updates } : p))
-    }))
+    })),
+  addSterilePack: (pack) => set((state) => ({ sterilePacks: [pack, ...state.sterilePacks] }))
 }));

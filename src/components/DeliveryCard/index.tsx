@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import { Delivery } from '@/types/instrument';
 import { DELIVERY_STATUS_MAP } from '@/types/instrument';
 import StatusTag from '@/components/StatusTag';
@@ -11,8 +12,14 @@ interface DeliveryCardProps {
 }
 
 const DeliveryCard: React.FC<DeliveryCardProps> = ({ delivery }) => {
+  const handleClick = () => {
+    Taro.navigateTo({
+      url: `/pages/delivery-detail/index?id=${delivery.id}`
+    });
+  };
+
   return (
-    <View className={styles.card}>
+    <View className={styles.card} onClick={handleClick}>
       <View className={styles.header}>
         <Text className={styles.deliveryNo}>{delivery.deliveryNo}</Text>
         <StatusTag status={delivery.status} statusMap={DELIVERY_STATUS_MAP} size="small" />

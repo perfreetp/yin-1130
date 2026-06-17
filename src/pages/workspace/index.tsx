@@ -8,7 +8,7 @@ import { getExpiryDays } from '@/utils/format';
 import styles from './index.module.scss';
 
 const WorkspacePage: React.FC = () => {
-  const { orders, sterilePacks, currentRole, user } = useAppStore();
+  const { orders, sterilePacks, currentRole, user, batches } = useAppStore();
 
   const pendingCount = orders.filter((o) => o.status === 'pending' || o.status === 'sealed').length;
   const processingCount = orders.filter((o) =>
@@ -31,8 +31,23 @@ const WorkspacePage: React.FC = () => {
       onlyFromCamera: true,
       scanType: ['qrCode', 'barCode'],
       success: (res) => {
-        console.info('[Workspace] Scan result:', res.result);
-        Taro.navigateTo({ url: `/pages/trace-query/index?code=${res.result}` });
+        const code = res.result;
+        console.info('[Workspace] Scan result:', code);
+
+        const order = orders.find(
+          (o) => o.orderNo === code || o.batchNo === code
+        );
+
+        if (order) {
+          Taro.navigateTo({ url: `/pages/order-detail/index?id=${order.id}` });
+        } else {
+          const batch = batches.find((b) => b.batchNo === code);
+          if (batch) {
+            Taro.navigateTo({ url: `/pages/batch-detail/index?id=${batch.id}` });
+          } else {
+            Taro.navigateTo({ url: `/pages/trace-query/index?code=${code}` });
+          }
+        }
       },
       fail: (err) => {
         console.error('[Workspace] Scan failed:', err);

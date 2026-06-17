@@ -4,20 +4,431 @@
   min-height: 100vh;
   background: $color-bg-page;
   padding: 0 $page-padding;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+  padding-top: 32rpx;
+}
+
+.statusBanner {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  margin: 0 (-$page-padding) 32rpx;
+  padding: 48rpx $page-padding;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusText {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.deliveryNoText {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.section {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid $color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.label {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+}
+
+.value {
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.progress {
+  display: flex;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  position: relative;
+}
+
+.step {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  position: relative;
 }
 
-.title {
+.stepDotWrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stepDot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: $color-border;
+  z-index: 2;
+}
+
+.stepDotCurrent {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: $color-primary;
+  border: 4rpx solid $color-primary-light;
+  z-index: 2;
+  animation: pulse 2s infinite;
+}
+
+.stepDotActive {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: $color-primary;
+  z-index: 2;
+}
+
+.stepLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: -50%;
+  height: 4rpx;
+  background: $color-border;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.stepLineActive {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: -50%;
+  height: 4rpx;
+  background: $color-primary;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.stepLabel {
+  margin-top: 16rpx;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.stepLabelActive {
+  margin-top: 16rpx;
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.stepTime {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: $color-text-tertiary;
+}
+
+.detailTime {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-top: 1rpx solid $color-divider;
+}
+
+.detailLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.detailValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.resultPass {
+  color: $color-success !important;
+  font-weight: $font-weight-medium;
+}
+
+.resultMismatch {
+  color: $color-danger !important;
+  font-weight: $font-weight-medium;
+}
+
+.batchItem,
+.orderItem {
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.batchHeader,
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.batchNo,
+.orderNo {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.batchInfo,
+.orderInfo {
+  display: flex;
+  gap: 32rpx;
+}
+
+.batchInfoText,
+.orderInfoText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.remarkBox {
+  padding: $spacing-md;
+  background: $color-tag-pending-bg;
+  border-radius: $radius-md;
+}
+
+.remarkText {
+  font-size: $font-size-sm;
+  color: $color-warning;
+  line-height: 1.6;
+}
+
+.placeholder {
+  height: 160rpx;
+}
+
+.actionBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-white;
+  padding: 24rpx $page-padding;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.actionScroll {
+  white-space: nowrap;
+}
+
+.actionBtns {
+  display: inline-flex;
+  gap: 16rpx;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 40rpx;
+  border-radius: $radius-round;
+  white-space: nowrap;
+}
+
+.actionBtnPrimary {
+  background: $color-primary;
+}
+
+.actionBtnSecondary {
+  background: $color-tag-processing-bg;
+  border: 1rpx solid $color-primary;
+}
+
+.actionBtnDanger {
+  background: $color-tag-error-bg;
+  border: 1rpx solid $color-error;
+}
+
+.actionBtnTextPrimary {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-white;
+}
+
+.actionBtnText {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+}
+
+.actionBtnTextDanger {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-error;
+}
+
+.dialogMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0 48rpx;
+}
+
+.dialog {
+  width: 100%;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 48rpx 40rpx;
+}
+
+.dialogTitle {
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
-  margin-bottom: $spacing-sm;
+  text-align: center;
+  margin-bottom: 16rpx;
+  display: block;
 }
 
-.desc {
+.dialogDesc {
   font-size: $font-size-sm;
-  color: $color-text-tertiary;
+  color: $color-text-secondary;
+  text-align: center;
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+.formItem {
+  margin-bottom: 24rpx;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.formInput {
+  width: 100%;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.formTextarea {
+  width: 100%;
+  padding: 20rpx 24rpx;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  min-height: 160rpx;
+  box-sizing: border-box;
+}
+
+.dialogButtons {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 32rpx;
+}
+
+.recheckButtons {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 32rpx;
+}
+
+.dialogBtn {
+  flex: 1;
+  padding: 24rpx;
+  border-radius: $radius-md;
+  text-align: center;
+  background: $color-bg-page;
+}
+
+.dialogBtnPrimary {
+  background: $color-primary;
+}
+
+.dialogBtnSuccess {
+  background: $color-success;
+}
+
+.dialogBtnDanger {
+  background: $color-error;
+}
+
+.dialogBtnText {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+}
+
+.dialogBtnTextPrimary {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-white;
+}
+
+.dialogBtnTextDanger {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-white;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
 }

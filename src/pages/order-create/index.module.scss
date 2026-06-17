@@ -14,7 +14,7 @@
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
 }
 
 .subtitle {
@@ -30,11 +30,23 @@
   margin-bottom: $spacing-md;
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
 .sectionLabel {
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
-  margin-bottom: $spacing-md;
+  margin-bottom: 0;
+}
+
+.photoCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
 }
 
 .inputGroup {
@@ -81,19 +93,54 @@
   flex: 1;
   font-size: $font-size-sm;
   color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.qtyControl {
+  display: flex;
+  align-items: center;
+  margin-right: $spacing-md;
+}
+
+.qtyBtn {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-bg-page;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+
+  &:active {
+    background: $color-border;
+  }
+}
+
+.qtyBtnText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
 }
 
 .instrumentQty {
   font-size: $font-size-sm;
   color: $color-primary;
-  font-weight: $font-weight-medium;
-  margin-right: $spacing-sm;
+  font-weight: $font-weight-semibold;
+  margin: 0 $spacing-sm;
+  min-width: 48rpx;
+  text-align: center;
 }
 
 .removeBtn {
   font-size: $font-size-sm;
   color: $color-status-error;
   padding: $spacing-xs;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.7;
+  }
 }
 
 .addBtn {
@@ -104,12 +151,37 @@
   border: 2rpx dashed $color-border;
   border-radius: $radius-sm;
   margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    background: $color-bg-hover;
+    border-color: $color-primary;
+  }
 }
 
 .addBtnText {
   font-size: $font-size-sm;
   color: $color-primary;
   font-weight: $font-weight-medium;
+}
+
+.totalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-sm;
+  border-top: 2rpx solid $color-divider;
+}
+
+.totalLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.totalValue {
+  font-size: $font-size-md;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
 }
 
 .photoSection {
@@ -127,15 +199,64 @@
   height: 160rpx;
   border-radius: $radius-sm;
   background: $color-bg-page;
+  border: 2rpx dashed $color-border;
+  position: relative;
+  overflow: hidden;
+}
+
+.photoAdd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+  border-style: dashed;
+
+  &:active {
+    opacity: 0.7;
+    border-color: $color-primary;
+  }
+}
+
+.photoIcon {
+  font-size: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.photoAddText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.photoRemove {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: $radius-round;
+  background: rgba(231, 76, 60, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2rpx dashed $color-border;
+  z-index: 2;
+
+  &:active {
+    opacity: 0.7;
+  }
 }
 
-.photoText {
-  font-size: 48rpx;
-  color: $color-text-disabled;
+.photoRemoveText {
+  font-size: 24rpx;
+  color: #fff;
+  line-height: 1;
+  font-weight: $font-weight-bold;
 }
 
 .remarkInput {
@@ -159,6 +280,7 @@
   box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
   display: flex;
   gap: $spacing-md;
+  z-index: 100;
 }
 
 .btnSecondary {
@@ -170,9 +292,11 @@
   align-items: center;
   justify-content: center;
   background: $color-bg-card;
+  transition: all $transition-base;
 
   &:active {
     opacity: 0.9;
+    background: $color-bg-hover;
   }
 }
 
@@ -190,10 +314,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all $transition-base;
 
   &:active {
     opacity: 0.9;
     transform: scale(0.98);
+  }
+}
+
+.btnDisabled {
+  background: $color-border;
+  opacity: 0.6;
+  transform: none !important;
+
+  &:active {
+    transform: none !important;
   }
 }
 
@@ -204,5 +339,5 @@
 }
 
 .placeholder {
-  padding-bottom: 140rpx;
+  padding-bottom: 160rpx;
 }
