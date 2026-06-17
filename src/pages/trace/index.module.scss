@@ -1,0 +1,202 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-card;
+  box-shadow: $shadow-card;
+}
+
+.searchInput {
+  flex: 1;
+  height: 72rpx;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  padding: 0 $spacing-lg;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.searchBtn {
+  margin-left: $spacing-sm;
+  height: 72rpx;
+  padding: 0 $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.searchBtnText {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.tabBar {
+  display: flex;
+  background: $color-bg-card;
+  padding: 0;
+  box-shadow: $shadow-card;
+}
+
+.tab {
+  flex: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.tabActive {
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48rpx;
+    height: 6rpx;
+    border-radius: 3rpx;
+    background: $color-primary;
+  }
+}
+
+.tabText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-medium;
+}
+
+.tabTextActive {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.content {
+  padding: $spacing-md $spacing-lg;
+}
+
+.packCard {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.packHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.packNo {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.packInfo {
+  margin-bottom: $spacing-sm;
+}
+
+.packRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.packLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.packValue {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.packExpiry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.expiryLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.expiryDate {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.expiryValid {
+  color: $color-status-completed;
+}
+
+.expiryWarning {
+  color: $color-status-expiry-warning;
+}
+
+.expiryExpired {
+  color: $color-status-error;
+}
+
+.usedInfo {
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+  margin-top: $spacing-xs;
+}
+
+.usedText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}

@@ -1,0 +1,205 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(14, 165, 160, 0.06) 0%, $color-bg-page 400rpx);
+}
+
+.header {
+  padding: $spacing-lg $spacing-lg $spacing-md;
+}
+
+.greeting {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  background: $color-tag-completed-bg;
+  border-radius: $radius-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.roleText {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.statsGrid {
+  display: flex;
+  gap: $spacing-sm;
+  padding: 0 $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.statCard {
+  flex: 1;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-sm;
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statNumber {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.quickActions {
+  padding: 0 $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.actionGrid {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.actionItem {
+  flex: 1;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg $spacing-md;
+  box-shadow: $shadow-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.actionIcon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-sm;
+  font-size: 36rpx;
+}
+
+.actionIconPrimary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.actionIconWarning {
+  background: linear-gradient(135deg, #ff9f43 0%, #ffbe76 100%);
+}
+
+.actionIconInfo {
+  background: linear-gradient(135deg, #3498db 0%, #74b9ff 100%);
+}
+
+.actionIconSuccess {
+  background: linear-gradient(135deg, #27ae60 0%, #55efc4 100%);
+}
+
+.actionName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  text-align: center;
+}
+
+.recentSection {
+  padding: 0 $spacing-lg;
+}
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.packWarningSection {
+  padding: $spacing-lg;
+}
+
+.warningCard {
+  background: rgba(255, 159, 67, 0.08);
+  border: 1rpx solid rgba(255, 159, 67, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+}
+
+.warningHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.warningTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-status-pending;
+}
+
+.warningCount {
+  font-size: $font-size-sm;
+  color: $color-status-pending;
+}
+
+.warningItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid rgba(255, 159, 67, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.warningPackNo {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.warningExpiry {
+  font-size: $font-size-xs;
+  color: $color-status-expiry-warning;
+  font-weight: $font-weight-medium;
+}

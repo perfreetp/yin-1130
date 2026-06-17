@@ -1,0 +1,53 @@
+@use '@/styles/variables.scss' as *;
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  white-space: nowrap;
+}
+
+.small {
+  padding: 2rpx 12rpx;
+
+  .text {
+    font-size: $font-size-xs;
+  }
+}
+
+.text {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  line-height: 1.4;
+}
+
+.pending {
+  background: $color-tag-pending-bg;
+  color: $color-status-pending;
+}
+
+.processing {
+  background: $color-tag-processing-bg;
+  color: $color-status-processing;
+}
+
+.completed {
+  background: $color-tag-completed-bg;
+  color: $color-status-completed;
+}
+
+.error {
+  background: $color-tag-error-bg;
+  color: $color-status-error;
+}
+
+.warning {
+  background: rgba(243, 156, 18, 0.12);
+  color: $color-status-expiry-warning;
+}
+
+.used {
+  background: $color-bg-hover;
+  color: $color-text-tertiary;
+}
