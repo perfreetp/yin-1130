@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import { Batch } from '@/types/instrument';
 import { BATCH_STATUS_MAP } from '@/types/instrument';
 import StatusTag from '@/components/StatusTag';
@@ -11,6 +12,11 @@ interface BatchCardProps {
 }
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
+  const handleClick = () => {
+    Taro.navigateTo({
+      url: `/pages/batch-detail/index?id=${batch.id}`
+    });
+  };
   const steps = [
     { key: 'received', label: '入库', time: null, done: true },
     { key: 'washing', label: '清洗', time: batch.washCompletedAt || null, done: !!batch.washCompletedAt },
@@ -21,7 +27,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const currentStep = batch.status === 'returned' ? -1 : steps.findIndex((s) => !s.done);
 
   return (
-    <View className={styles.card}>
+    <View className={styles.card} onClick={handleClick}>
       <View className={styles.header}>
         <Text className={styles.batchNo}>{batch.batchNo}</Text>
         <StatusTag status={batch.status} statusMap={BATCH_STATUS_MAP} size="small" />

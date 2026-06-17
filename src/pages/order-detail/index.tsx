@@ -234,6 +234,42 @@ const OrderDetailPage: React.FC = () => {
         </View>
       </View>
 
+      {order.recheckResult && (
+        <View className={styles.section}>
+          <Text className={styles.sectionTitle}>收货复点结果</Text>
+          <View className={styles.row}>
+            <Text className={styles.label}>复点结果</Text>
+            <Text
+              className={classnames(
+                styles.value,
+                order.recheckResult === 'pass' ? styles.resultPass : styles.resultMismatch
+              )}
+            >
+              {order.recheckResult === 'pass' ? '✓ 数量一致' : '✗ 数量不符'}
+            </Text>
+          </View>
+          {order.actualCount !== undefined && (
+            <View className={styles.row}>
+              <Text className={styles.label}>实收数量</Text>
+              <Text className={styles.value}>
+                {order.actualCount} 件
+                <Text style={{ color: '#8e99a8', fontSize: 24 }}>
+                  {' '}
+                  （应收 {order.instrumentCount} 件）
+                </Text>
+              </Text>
+            </View>
+          )}
+          {order.recheckRemark && (
+            <View className={styles.remarkBox}>
+              <Text className={styles.remarkText}>
+                差异说明：{order.recheckRemark}
+              </Text>
+            </View>
+          )}
+        </View>
+      )}
+
       {order.sealedPhotos && order.sealedPhotos.length > 0 && (
         <View className={styles.section}>
           <View className={styles.sectionHeader}>

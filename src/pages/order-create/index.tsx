@@ -26,19 +26,16 @@ const OrderCreatePage: React.FC = () => {
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: (res) => {
-        const newPhotos = res.tempFilePaths.map((path) => {
-          return path.startsWith('http')
-            ? path
-            : `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 1}/200/200`;
-        });
-        setSealedPhotos((prev) => [...prev, ...newPhotos]);
-        console.info('[OrderCreate] Photos added:', newPhotos);
+        const newPhotos = res.tempFilePaths;
+        if (newPhotos.length > 0) {
+          setSealedPhotos((prev) => [...prev, ...newPhotos]);
+          console.info('[OrderCreate] Photos added:', newPhotos.length, '张');
+          Taro.showToast({ title: `已添加${newPhotos.length}张照片`, icon: 'success' });
+        }
       },
       fail: (err) => {
         console.error('[OrderCreate] Choose image failed:', err);
-        const fallbackPhoto = `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 1}/200/200`;
-        setSealedPhotos((prev) => [...prev, fallbackPhoto]);
-        Taro.showToast({ title: '已添加照片', icon: 'success' });
+        Taro.showToast({ title: '未选择照片', icon: 'none' });
       }
     });
   };

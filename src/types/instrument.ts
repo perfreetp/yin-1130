@@ -28,6 +28,9 @@ export interface Order {
   signedAt?: string;
   batchNo?: string;
   remark?: string;
+  recheckResult?: 'pass' | 'mismatch';
+  recheckRemark?: string;
+  actualCount?: number;
 }
 
 export interface Batch {

@@ -141,14 +141,16 @@ const DeliveryDetailPage: React.FC = () => {
             recheckResult: result,
             remark: recheckRemark || undefined
           });
-          if (result === 'pass') {
-            relatedOrders.forEach((order) => {
-              updateOrder(order.id, {
-                status: 'signed',
-                signedAt: order.signedAt || now
-              });
-            });
-          }
+          relatedOrders.forEach((order) => {
+            const orderUpdates: any = {
+              status: 'signed',
+              signedAt: order.signedAt || now,
+              recheckResult: result,
+              actualCount: result === 'mismatch' ? actualQty : undefined,
+              recheckRemark: result === 'mismatch' ? (recheckRemark || '数量不符') : undefined
+            };
+            updateOrder(order.id, orderUpdates);
+          });
           console.info(
             '[DeliveryDetail] Delivery rechecked:',
             delivery.deliveryNo,

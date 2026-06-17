@@ -34,6 +34,12 @@ const HandoverPage: React.FC = () => {
 
   const filters = activeTab === 'clinic' ? clinicFilters : centerFilters;
 
+  const pendingCount = orders.filter((o) => o.status === 'pending' || o.status === 'sealed').length;
+  const processingCount = orders.filter((o) =>
+    ['received', 'washing', 'sterilizing'].includes(o.status)
+  ).length;
+  const completedCount = orders.filter((o) => o.status === 'completed' || o.status === 'delivering').length;
+
   const filteredOrders = useMemo(() => {
     let result: Order[] = orders;
 
@@ -92,6 +98,21 @@ const HandoverPage: React.FC = () => {
           >
             中心接收
           </Text>
+        </View>
+      </View>
+
+      <View className={styles.statsGrid}>
+        <View className={styles.statCard}>
+          <Text className={styles.statNumber}>{pendingCount}</Text>
+          <Text className={styles.statLabel}>待交接</Text>
+        </View>
+        <View className={styles.statCard}>
+          <Text className={styles.statNumber}>{processingCount}</Text>
+          <Text className={styles.statLabel}>处理中</Text>
+        </View>
+        <View className={styles.statCard}>
+          <Text className={styles.statNumber}>{completedCount}</Text>
+          <Text className={styles.statLabel}>待配送</Text>
         </View>
       </View>
 

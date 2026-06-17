@@ -77,3 +77,26 @@
   @include text-ellipsis;
   max-width: 320rpx;
 }
+
+.cardMismatch {
+  border: 2rpx solid $color-error;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.mismatchTag {
+  padding: 4rpx 12rpx;
+  background: $color-tag-error-bg;
+  border-radius: $radius-sm;
+  border: 1rpx solid $color-error;
+}
+
+.mismatchTagText {
+  font-size: 20rpx;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+}

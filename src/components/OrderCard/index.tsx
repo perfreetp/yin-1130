@@ -18,10 +18,17 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   };
 
   return (
-    <View className={styles.card} onClick={handleClick}>
+    <View className={classnames(styles.card, order.recheckResult === 'mismatch' && styles.cardMismatch)} onClick={handleClick}>
       <View className={styles.header}>
         <Text className={styles.orderNo}>{order.orderNo}</Text>
-        <StatusTag status={order.status} statusMap={ORDER_STATUS_MAP} size="small" />
+        <View className={styles.headerRight}>
+          {order.recheckResult === 'mismatch' && (
+            <View className={styles.mismatchTag}>
+              <Text className={styles.mismatchTagText}>数量不符</Text>
+            </View>
+          )}
+          <StatusTag status={order.status} statusMap={ORDER_STATUS_MAP} size="small" />
+        </View>
       </View>
       <View className={styles.body}>
         <View className={styles.row}>

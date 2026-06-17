@@ -266,3 +266,13 @@
 .placeholder {
   padding-bottom: 160rpx;
 }
+
+.resultPass {
+  color: $color-success !important;
+  font-weight: $font-weight-semibold;
+}
+
+.resultMismatch {
+  color: $color-error !important;
+  font-weight: $font-weight-semibold;
+}
