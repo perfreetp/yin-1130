@@ -67,6 +67,8 @@ export interface Delivery {
   signedBy?: string;
   recheckBy?: string;
   recheckResult?: 'pass' | 'mismatch';
+  remark?: string;
+  actualCount?: number;
 }
 
 export interface SterilePack {

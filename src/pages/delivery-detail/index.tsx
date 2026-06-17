@@ -139,7 +139,8 @@ const DeliveryDetailPage: React.FC = () => {
             recheckedAt: now,
             recheckBy: user.name,
             recheckResult: result,
-            remark: recheckRemark || undefined
+            actualCount: result === 'mismatch' ? actualQty : undefined,
+            remark: result === 'mismatch' ? (recheckRemark || '数量不符') : (recheckRemark || undefined)
           });
           relatedOrders.forEach((order) => {
             const orderUpdates: any = {
@@ -303,6 +304,18 @@ const DeliveryDetailPage: React.FC = () => {
             </Text>
           </View>
         )}
+        {delivery.actualCount !== undefined && (
+          <View className={styles.detailTime}>
+            <Text className={styles.detailLabel}>实收数量</Text>
+            <Text className={styles.detailValue}>
+              {delivery.actualCount} 件
+              <Text style={{ color: '#8e99a8', fontSize: 22 }}>
+                {' '}
+                （应收 {delivery.instrumentCount} 件）
+              </Text>
+            </Text>
+          </View>
+        )}
       </View>
 
       {relatedBatches.length > 0 && (
@@ -359,9 +372,23 @@ const DeliveryDetailPage: React.FC = () => {
 
       {delivery.remark && (
         <View className={styles.section}>
-          <Text className={styles.sectionTitle}>备注</Text>
-          <View className={styles.remarkBox}>
-            <Text className={styles.remarkText}>{delivery.remark}</Text>
+          <Text className={styles.sectionTitle}>
+            {delivery.recheckResult === 'mismatch' ? '差异说明' : '备注'}
+          </Text>
+          <View
+            className={classnames(
+              styles.remarkBox,
+              delivery.recheckResult === 'mismatch' && styles.remarkBoxMismatch
+            )}
+          >
+            <Text
+              className={classnames(
+                styles.remarkText,
+                delivery.recheckResult === 'mismatch' && styles.remarkTextMismatch
+              )}
+            >
+              {delivery.remark}
+            </Text>
           </View>
         </View>
       )}
